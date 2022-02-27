@@ -8,6 +8,7 @@ from flask_restx import fields,Resource, Namespace
 from business_logic import import_listings, generate_field_mappings, generate_vehicle_listing_obj
 from restplus import api
 from database import db
+from db_models import Vehicle_Listing as VL_Record, Validation_Errors as VE_Record
 import requests as rq
 import time
 
@@ -33,5 +34,15 @@ class TestMapping(Resource):
         for i,e in enumerate(m):
             logger.info(f"Mapping file {i} ")
             logger.info(e)
+        return Response('success', status=200)
+
+@ns.route('/clear')
+class ClearListings(Resource):
+
+    def get(self):
+
+        VL_Record.query.delete()
+        VE_Record.query.delete()
+        db.session.commit()
         return Response('success', status=200)
 
