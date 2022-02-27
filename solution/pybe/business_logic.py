@@ -18,9 +18,10 @@ def import_listings(provider, filename):
         msg = f"Could not open csv {import_file}"
         logger.exception(msg)
         return {"success":False,"message":f"Could not open {filename} for provider {provider}"}
+        
     logger.info("Listings:")
     logger.info(df_listings)
-    
+
     return {"success":True}
 
     
