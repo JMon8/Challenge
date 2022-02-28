@@ -20,15 +20,6 @@ class ImportListingCSV(Resource):
         else:
             return Response(result['message'],status=500)
 
-"""@ns.route('/checkmapping')
-class TestMapping(Resource):
-    def get(self):
-        m = generate_field_mappings()
-        for i,e in enumerate(m):
-            logger.info(f"Mapping file {i} ")
-            logger.info(e)
-        return Response('success', status=200)"""
-
 @ns.route('/clear')
 class ClearListings(Resource):
 
