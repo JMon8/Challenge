@@ -1,6 +1,5 @@
 import logging
 import pandas as pd
-import numpy as np
 import datetime
 import json
 from math import isnan
@@ -24,11 +23,13 @@ def import_listings(provider, filename):
         logger.exception(e)
         return {"success":False,"message":f"Mapping does not exist for provider {provider}"}
 
+    # Generate json list of vehicle listings
     logger.info("Generating Vehicle Listings")
     listings = generate_vehicle_listings(provider,filename)
     if listings is None:
         return {"success":False,"message":f"Could not open {filename} for provider {provider}"}
     
+    # Validate listings then insert into target
     logger.info("Validating and Creating records")
     total = len(listings)
     inserts = 0
@@ -44,12 +45,11 @@ def import_listings(provider, filename):
         if vl_obj is None:
             continue
 
+        # Insert into listing table
         result = vehicle_listing_to_db_record(vl_obj)
 
         if result['success'] == True:
             inserts += 1
-
-
     
     return {"success":True,"message":f"{inserts} of {total} listings added"}
 
@@ -100,15 +100,11 @@ def generate_vehicle_listings(provider, filename):
                 else:
                     listing_json[target] = listing.get(source).split(delim)
 
-
-
         logger.info(f'Result {i}: ')
         logger.info(listing_json)
         listings.append(listing_json)
 
-
-    return listings
-    
+    return listings   
 
 
 def vehicle_listing_to_db_record(listing_obj:VL_Obj):
@@ -188,7 +184,7 @@ def generate_vehicle_listing_obj(filename,listing_json):
         
         return listing_obj
     except ValidationError as e:
-        # Record validation errors in database
+        # Insert validation errors in database
         logger.info("Invalid Vehicle Listing. See issues below")
         logger.info(e.json())
         error_details = VE_Record(
@@ -213,11 +209,8 @@ def generate_vehicle_listing_obj(filename,listing_json):
     # If valid return obj
     # If invalid return validation errors
 
-def map_vehicle_listing(provider,filename):
-    import_file = f'./pybe/provider_feeds/provider{provider}/{filename}'
-
-
 def generate_field_mappings():
+    """Return mappings for each provider"""
     providers = 2
     mappings = []
     for i in range(1,providers+1):

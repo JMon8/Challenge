@@ -1,14 +1,10 @@
 import logging.config
 import logging
-import os
-import sqlalchemy as sa
 from flask import Flask
 from restplus import api
 from restplus import blueprint as bp
 from api_routes import ns as listings_namespace
 from database import db
-
-
 
 logging.basicConfig(
     level=logging.DEBUG,
