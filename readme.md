@@ -5,24 +5,18 @@ This solution provides a postgres database to run locally
 ## System Requirements
 You will need to have docker installed on your system. Make sure that docker is running before following the steps to start the solution
 
-Also, you may need a database tool in order to execute some sql code
+Ports 6543 and 8008 will need to be available on your system
 
-Ports 5432 and 8008 will need to be available on your system
+*Note: Typically I'd use standard 5432(postgres) and 8080(http server), but I wanted to avoid local conflicts on my machine*
 
 
 ## Starting the solution
 * From the command line, navigate to this current directory
-* Run the following command to start the database
+* Run the following command
 ```
-docker-compose up postgres -d
+docker-compose up -d
 ```
-* You can optionally remove '-d' if you would like to view the logs
-* Connect to the database using sa:Password123. Postgres is running on port 5432
-* Run the sql in "create_tables.sql" to create the tables
-* Once the tables are created, navigate back to the cli and run the following command
-```
-docker-compose up backend -d
-```
+*Note: You can remove '-d' to run with the logs*
 
 ## Running ETL job 
 ### via Browser
