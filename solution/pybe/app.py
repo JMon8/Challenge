@@ -1,6 +1,7 @@
 import logging.config
 import logging
 import os
+import sqlalchemy as sa
 from flask import Flask
 from restplus import api
 from restplus import blueprint as bp
@@ -27,9 +28,22 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # set up database
+log.info("Database Reflection...")
 db.init_app(app)
 with app.app_context():
     db.reflect()
+
+    log.info("Creating model tables...")
+    # Create tables if they dont exist
+    try:
+        from db_models import Validation_Errors, Vehicle_Listing
+        db.create_all()
+        db.session.commit()
+    except Exception as e:
+        log.info("table creation exception")
+        log.exception(e)
+        db.session.rollback()
+log.info('Completed Database Reflection...')
 
 api.init_app(bp)
 api.add_namespace(listings_namespace)

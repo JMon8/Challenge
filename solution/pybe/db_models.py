@@ -96,7 +96,7 @@ class Validation_Errors(AbstractModel):
     __tablename__ = 'validation_data'
     __table_args__ = {'schema': 'public'}
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('\"public\".validation_data_id_seq'::regclass)"))
+    id = Column(Integer, primary_key=True, autoincrement=True)
     provider = Column(Text, nullable=False)
     record = Column(JSONB(astext_type=Text()), nullable=False)
     errors = Column(JSONB(astext_type=Text()), nullable=False)
